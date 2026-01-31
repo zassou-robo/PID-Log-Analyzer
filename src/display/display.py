@@ -12,6 +12,7 @@ from PySide6.QtCore import Slot
 from src.display.display_funcs import funcs
 from src.calc.pid_calc import pid_calc
 from src.plot.plot import plot_all
+from src.display.csv_load import load_csv_file
 
 class MainWindow(QWidget):
   def __init__(self):
@@ -86,8 +87,19 @@ class MainWindow(QWidget):
 
   def process_a(self):
       # Aモードの処理
-      self.result_label.setText("ログを可視化します。")
-      # print("Aモードの処理")
+      try:
+          time_history, goal_history, actual_history = load_csv_file(self)
+          
+          if time_history is None:
+              self.result_label.setText("キャンセルされました。")
+              return
+          
+          # グラフを描画
+          plot_all(time_history, goal_history, actual_history)
+          self.result_label.setText(f"ログを可視化しました。（{len(time_history)}データポイント）")
+          
+      except Exception as e:
+          self.result_label.setText(f"エラー: {str(e)}")
 
   def process_b(self):
       # Bモードの処理
