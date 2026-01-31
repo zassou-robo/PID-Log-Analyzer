@@ -14,6 +14,10 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 2.目標値、ゲインを指定することで最適なゲイン調整の補助。
 ## システム外観
 ### PIDロググラフ
+![first_ui](./assets/pictures/switch_ui_first.png)
+モード選択前のUIです
+![sim_ui](./assets/pictures/simration_ui.png)
+シミュレーションモードでの値入力画面です
 ![pid_log](./assets/pictures/pid_simulation.png)
 目標値、現在の出力、差が表示されています。
 ## ダウンロード
