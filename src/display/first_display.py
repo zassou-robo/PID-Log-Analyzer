@@ -1,4 +1,5 @@
 import sys
+import os
 from PySide6.QtWidgets import (
     QApplication,
     QWidget,
@@ -30,18 +31,37 @@ class FirstDisplay(QWidget):
 
         # ===== ロゴエリア =====
         logo_frame = QFrame()
-        logo_frame.setStyleSheet("border: 2px dashed #888888; border-radius: 5px;")
+        logo_frame.setStyleSheet("border: none; background-color: transparent;")  # 枠を非表示にして背景を透明に
         logo_layout = QVBoxLayout(logo_frame)
+        logo_layout.setContentsMargins(0, 0, 0, 0)  # 余白を削除
         
         logo_label = QLabel()
-        logo_label.setText("ロゴ\nPID_Log_Analyzer")
-        logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        logo_label.setMinimumHeight(120)
-        logo_font = QFont()
-        logo_font.setPointSize(24)
-        logo_font.setBold(True)
-        logo_label.setFont(logo_font)
-        logo_label.setStyleSheet("color: #666666;")
+        # プロジェクトルートを基準にしたパスを構築
+        logo_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "pictures", "PID_Log_Analyzer_logo.png")
+        logo_pixmap = QPixmap(logo_path)
+        
+        # ロゴが読み込めたかチェック
+        if not logo_pixmap.isNull():
+            # 画像を読み込めた場合 - 正方形サイズ（150×150）で拡大縮小
+            logo_pixmap = logo_pixmap.scaledToWidth(150, Qt.SmoothTransformation)
+            # 正方形にするため、不足している高さを追加
+            if logo_pixmap.height() < 150:
+                logo_pixmap = logo_pixmap.scaledToHeight(150, Qt.SmoothTransformation)
+            logo_label.setPixmap(logo_pixmap)
+            logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            logo_label.setMinimumHeight(150)
+            logo_label.setMaximumHeight(150)
+        else:
+            # 画像を読み込めなかった場合はテキストを表示
+            logo_label.setText("ロゴ\nPID_Log_Analyzer")
+            logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            logo_label.setMinimumHeight(150)
+            logo_label.setMaximumHeight(150)
+            logo_font = QFont()
+            logo_font.setPointSize(24)
+            logo_font.setBold(True)
+            logo_label.setFont(logo_font)
+            logo_label.setStyleSheet("color: #666666;")
         
         logo_layout.addWidget(logo_label)
         main_layout.addWidget(logo_frame)
