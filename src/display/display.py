@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Slot
 from src.display.display_funcs import funcs
+from src.calc.pid_calc import pid_calc
 
 class MainWindow(QWidget):
   def __init__(self):
@@ -89,9 +90,45 @@ class MainWindow(QWidget):
 
   def process_b(self):
       # Bモードの処理
-      self.result_label.setText("シミュレーションを行います")
-      # print("Bモードの処理")
-      funcs.__init__
+      try:
+          # 入力値を取得
+          goal = float(self.textbox_goal.text())
+          gain_str = self.textbox_gain.text()
+          gains = [float(x.strip()) for x in gain_str.split(',')]
+          p_gain, i_gain, d_gain = gains[0], gains[1], gains[2]
+          
+          # シミュレーション実行
+          time_step = 0.01
+          simulation_time = 100
+          
+          actual = 0
+          pre_error = 0
+          time_history = []
+          goal_history = []
+          actual_history = []
+          
+          for i in range(simulation_time):
+              error = goal - actual
+              output = pid_calc(error, pre_error, time_step, p_gain, i_gain, d_gain)
+              actual += output
+              
+              time_history.append(i * time_step)
+              goal_history.append(goal)
+              actual_history.append(actual)
+              
+              pre_error = error
+          
+          # 最終結果を表示
+          final_actual = actual_history[-1]
+          steady_state_error = goal - final_actual
+          
+          result_text = f"シミュレーション完了 | 目標値: {goal} | 最終値: {final_actual:.2f} | 定常偏差: {steady_state_error:.2f}"
+          self.result_label.setText(result_text)
+          
+      except ValueError:
+          self.result_label.setText("エラー: 入力値が正しくありません。数値を入力してください。")
+      except IndexError:
+          self.result_label.setText("エラー: ゲイン値は3つ必要です（P, I, D をカンマ区切りで入力）")
 
 
 # if __name__ == "__main__":
