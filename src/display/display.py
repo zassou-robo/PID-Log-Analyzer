@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QFrame,
+    QScrollArea,
 )
 from PySide6.QtCore import Slot, Qt
 from PySide6.QtGui import QFont
@@ -104,7 +105,12 @@ class MainWindow(QWidget):
     
     layout.addWidget(mode_frame)
 
-    # ===== シミュレーションモード用のテキストボックス =====
+    # ===== シミュレーションモード用のテキストボックス（スクロール対応） =====
+    # スクロールエリア
+    scroll_area = QScrollArea()
+    scroll_area.setWidgetResizable(True)
+    scroll_area.setStyleSheet("QScrollArea { border: none; }")
+    
     self.sim_widget = QWidget()
     self.sim_layout = QVBoxLayout(self.sim_widget)
     self.sim_layout.setSpacing(10)
@@ -151,9 +157,15 @@ class MainWindow(QWidget):
     sim_frame_layout.addWidget(self.textbox_gain)
     
     self.sim_layout.addWidget(sim_frame)
-    self.sim_widget.setMaximumHeight(200)  # シミュレーションウィジェットの高さを制限
-    self.sim_widget.hide()
-    layout.addWidget(self.sim_widget)
+    self.sim_layout.addStretch()
+    
+    # スクロールエリアにウィジェットを設定
+    scroll_area.setWidget(self.sim_widget)
+    scroll_area.setMaximumHeight(200)  # スクロール可能な高さ
+    scroll_area.hide()
+    layout.addWidget(scroll_area)
+    
+    self.scroll_area = scroll_area
 
     layout.addStretch()
 
@@ -205,7 +217,7 @@ class MainWindow(QWidget):
     self.mode_b_frame.setStyleSheet(
         "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
     )
-    self.sim_widget.hide()
+    self.scroll_area.hide()
 
   @Slot()
   def on_mode_b_clicked(self):
@@ -216,7 +228,7 @@ class MainWindow(QWidget):
     self.mode_b_frame.setStyleSheet(
         "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
     )
-    self.sim_widget.show()
+    self.scroll_area.show()
 
   @Slot()
   def on_execute(self):
