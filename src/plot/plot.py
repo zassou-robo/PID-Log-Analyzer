@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_all(t:float, goal:float, actual:float):
+def plot_all(t, goal, actual):
     goal = np.array(goal)
     actual = np.array(actual)
     err = goal - actual
