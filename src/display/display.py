@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Slot
 from src.display.display_funcs import funcs
 from src.calc.pid_calc import pid_calc
+from src.plot.plot import plot_all
 
 class MainWindow(QWidget):
   def __init__(self):
@@ -124,6 +125,9 @@ class MainWindow(QWidget):
           
           result_text = f"シミュレーション完了 | 目標値: {goal} | 最終値: {final_actual:.2f} | 定常偏差: {steady_state_error:.2f}"
           self.result_label.setText(result_text)
+          
+          # グラフを描画
+          plot_all(time_history, goal_history, actual_history)
           
       except ValueError:
           self.result_label.setText("エラー: 入力値が正しくありません。数値を入力してください。")
