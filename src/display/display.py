@@ -54,23 +54,52 @@ class MainWindow(QWidget):
     mode_frame = QFrame()
     mode_frame.setStyleSheet("border: 1px solid #ddd; border-radius: 5px; padding: 15px;")
     mode_layout = QVBoxLayout(mode_frame)
-    mode_layout.setSpacing(12)
+    mode_layout.setSpacing(15)
 
+    # モードA フレーム
+    self.mode_a_frame = QFrame()
+    self.mode_a_frame.setStyleSheet(
+        "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
+    )
+    mode_a_layout = QVBoxLayout(self.mode_a_frame)
+    mode_a_layout.setSpacing(5)
+    mode_a_layout.setContentsMargins(10, 10, 10, 10)
+    
     self.radio_a = QRadioButton("ログ可視化モード")
+    radio_a_font = QFont()
+    radio_a_font.setPointSize(11)
+    radio_a_font.setBold(True)
+    self.radio_a.setFont(radio_a_font)
     radio_a_desc = QLabel("CSVファイルを読み込み、PID制御のログをグラフで可視化します")
-    radio_a_desc.setStyleSheet("color: #666666; font-size: 9pt; margin-left: 25px;")
+    radio_a_desc.setStyleSheet("color: #666666; font-size: 9pt;")
+    
+    mode_a_layout.addWidget(self.radio_a)
+    mode_a_layout.addWidget(radio_a_desc)
+    mode_layout.addWidget(self.mode_a_frame)
+
+    # モードB フレーム
+    self.mode_b_frame = QFrame()
+    self.mode_b_frame.setStyleSheet(
+        "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
+    )
+    mode_b_layout = QVBoxLayout(self.mode_b_frame)
+    mode_b_layout.setSpacing(5)
+    mode_b_layout.setContentsMargins(10, 10, 10, 10)
     
     self.radio_b = QRadioButton("シミュレーションモード")
+    radio_b_font = QFont()
+    radio_b_font.setPointSize(11)
+    radio_b_font.setBold(True)
+    self.radio_b.setFont(radio_b_font)
     radio_b_desc = QLabel("ゲインと目標値を入力し、シミュレーションを実行します")
-    radio_b_desc.setStyleSheet("color: #666666; font-size: 9pt; margin-left: 25px;")
+    radio_b_desc.setStyleSheet("color: #666666; font-size: 9pt;")
 
     # 初期状態
     self.radio_a.setChecked(True)
 
-    mode_layout.addWidget(self.radio_a)
-    mode_layout.addWidget(radio_a_desc)
-    mode_layout.addWidget(self.radio_b)
-    mode_layout.addWidget(radio_b_desc)
+    mode_b_layout.addWidget(self.radio_b)
+    mode_b_layout.addWidget(radio_b_desc)
+    mode_layout.addWidget(self.mode_b_frame)
     
     layout.addWidget(mode_frame)
 
@@ -168,8 +197,22 @@ class MainWindow(QWidget):
   @Slot()
   def on_mode_changed(self):
     if self.radio_b.isChecked():
+      # モードB選択時
+      self.mode_a_frame.setStyleSheet(
+          "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
+      )
+      self.mode_b_frame.setStyleSheet(
+          "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
+      )
       self.sim_widget.show()
     else:
+      # モードA選択時
+      self.mode_a_frame.setStyleSheet(
+          "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
+      )
+      self.mode_b_frame.setStyleSheet(
+          "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
+      )
       self.sim_widget.hide()
 
   @Slot()
