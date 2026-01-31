@@ -191,29 +191,30 @@ class MainWindow(QWidget):
     layout.addWidget(self.result_label)
 
     self.exec_button.clicked.connect(self.on_execute)
-    self.radio_a.toggled.connect(self.on_mode_changed)
-    self.radio_b.toggled.connect(self.on_mode_changed)
+    self.radio_a.clicked.connect(self.on_mode_a_clicked)
+    self.radio_b.clicked.connect(self.on_mode_b_clicked)
 
   @Slot()
-  def on_mode_changed(self):
-    if self.radio_b.isChecked():
-      # モードB選択時
-      self.mode_a_frame.setStyleSheet(
-          "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
-      )
-      self.mode_b_frame.setStyleSheet(
-          "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
-      )
-      self.sim_widget.show()
-    else:
-      # モードA選択時
-      self.mode_a_frame.setStyleSheet(
-          "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
-      )
-      self.mode_b_frame.setStyleSheet(
-          "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
-      )
-      self.sim_widget.hide()
+  def on_mode_a_clicked(self):
+    """モードAがクリックされた時"""
+    self.mode_a_frame.setStyleSheet(
+        "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
+    )
+    self.mode_b_frame.setStyleSheet(
+        "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
+    )
+    self.sim_widget.hide()
+
+  @Slot()
+  def on_mode_b_clicked(self):
+    """モードBがクリックされた時"""
+    self.mode_a_frame.setStyleSheet(
+        "QFrame { border: 2px solid #cccccc; border-radius: 5px; padding: 10px; background-color: #ffffff; }"
+    )
+    self.mode_b_frame.setStyleSheet(
+        "QFrame { border: 2px solid #4CAF50; border-radius: 5px; padding: 10px; background-color: #f1f8f4; }"
+    )
+    self.sim_widget.show()
 
   @Slot()
   def on_execute(self):
