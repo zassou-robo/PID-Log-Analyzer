@@ -7,8 +7,10 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLabel,
     QLineEdit,
+    QFrame,
 )
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
+from PySide6.QtGui import QFont
 from src.display.display_funcs import funcs
 from src.calc.pid_calc import pid_calc
 from src.plot.plot import plot_all
@@ -17,55 +19,147 @@ from src.display.csv_load import load_csv_file
 class MainWindow(QWidget):
   def __init__(self):
     super().__init__()
-    self.setWindowTitle("ログ可視化モード/シミュレーションモード切替")
+    self.setWindowTitle("PID_Log_Analyzer - モード選択")
+    self.setGeometry(100, 100, 800, 700)
+    
+    # スタイルシート（統一デザイン）
+    self.setStyleSheet(
+        "QWidget { background-color: #ffffff; }"
+        "QLabel { color: #333333; }"
+        "QRadioButton { color: #333333; font-size: 11pt; }"
+    )
 
     layout = QVBoxLayout(self)
+    layout.setSpacing(15)
+    layout.setContentsMargins(40, 30, 40, 30)
 
-    self.radio_a = QRadioButton("ログ可視化モード　csvファイルを読み込みグラフ描画をします")
-    self.radio_b = QRadioButton("シミュレーションモード　ゲインと目標値をもとにシミュレーションを行います")
+    # ===== タイトル =====
+    title_label = QLabel("PID 制御ログ解析")
+    title_font = QFont()
+    title_font.setPointSize(18)
+    title_font.setBold(True)
+    title_label.setFont(title_font)
+    title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    layout.addWidget(title_label)
 
-        # 初期状態
+    # ===== モード選択説明 =====
+    mode_desc = QLabel("以下のモードを選択して実行してください")
+    mode_desc_font = QFont()
+    mode_desc_font.setPointSize(11)
+    mode_desc.setFont(mode_desc_font)
+    mode_desc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    layout.addWidget(mode_desc)
+
+    # ===== モード選択フレーム =====
+    mode_frame = QFrame()
+    mode_frame.setStyleSheet("border: 1px solid #ddd; border-radius: 5px; padding: 15px;")
+    mode_layout = QVBoxLayout(mode_frame)
+    mode_layout.setSpacing(12)
+
+    self.radio_a = QRadioButton("ログ可視化モード")
+    radio_a_desc = QLabel("CSVファイルを読み込み、PID制御のログをグラフで可視化します")
+    radio_a_desc.setStyleSheet("color: #666666; font-size: 9pt; margin-left: 25px;")
+    
+    self.radio_b = QRadioButton("シミュレーションモード")
+    radio_b_desc = QLabel("ゲインと目標値を入力し、シミュレーションを実行します")
+    radio_b_desc.setStyleSheet("color: #666666; font-size: 9pt; margin-left: 25px;")
+
+    # 初期状態
     self.radio_a.setChecked(True)
 
-        # 実行ボタン
-    self.exec_button = QPushButton("実行")
+    mode_layout.addWidget(self.radio_a)
+    mode_layout.addWidget(radio_a_desc)
+    mode_layout.addWidget(self.radio_b)
+    mode_layout.addWidget(radio_b_desc)
+    
+    layout.addWidget(mode_frame)
 
-        # 結果表示
-    self.result_label = QLabel("未実行")
-
-    layout.addWidget(self.radio_a)
-    layout.addWidget(self.radio_b)
-    layout.addWidget(self.exec_button)
-    layout.addWidget(self.result_label)
-
-    # シミュレーションモード用のテキストボックス
+    # ===== シミュレーションモード用のテキストボックス =====
     self.sim_widget = QWidget()
     self.sim_layout = QVBoxLayout(self.sim_widget)
+    self.sim_layout.setSpacing(10)
+
+    sim_frame = QFrame()
+    sim_frame.setStyleSheet("border: 1px solid #ddd; border-radius: 5px; padding: 15px;")
+    sim_frame_layout = QVBoxLayout(sim_frame)
+    sim_frame_layout.setSpacing(10)
+    
+    # シミュレーション設定タイトル
+    sim_title = QLabel("シミュレーション設定")
+    sim_title_font = QFont()
+    sim_title_font.setPointSize(12)
+    sim_title_font.setBold(True)
+    sim_title.setFont(sim_title_font)
+    sim_frame_layout.addWidget(sim_title)
     
     # 目標値入力
     self.label_goal = QLabel("目標値:")
+    goal_font = QFont()
+    goal_font.setPointSize(10)
+    self.label_goal.setFont(goal_font)
     self.textbox_goal = QLineEdit()
-    self.textbox_goal.setPlaceholderText("目標値を入力してください")
-    self.sim_layout.addWidget(self.label_goal)
-    self.sim_layout.addWidget(self.textbox_goal)
+    self.textbox_goal.setPlaceholderText("例: 10.5")
+    self.textbox_goal.setMinimumHeight(35)
+    self.textbox_goal.setStyleSheet(
+        "QLineEdit { border: 1px solid #ccc; border-radius: 4px; padding: 5px; }"
+    )
+    sim_frame_layout.addWidget(self.label_goal)
+    sim_frame_layout.addWidget(self.textbox_goal)
     
     # ゲイン値入力
     self.label_gain = QLabel("ゲイン値 (P, I, D):")
+    gain_font = QFont()
+    gain_font.setPointSize(10)
+    self.label_gain.setFont(gain_font)
     self.textbox_gain = QLineEdit()
-    self.textbox_gain.setPlaceholderText("例: 0.2, 0.1, 0.0 (P値, I値, D値)")
-    self.sim_layout.addWidget(self.label_gain)
-    self.sim_layout.addWidget(self.textbox_gain)
+    self.textbox_gain.setPlaceholderText("例: 0.2, 0.1, 0.0")
+    self.textbox_gain.setMinimumHeight(35)
+    self.textbox_gain.setStyleSheet(
+        "QLineEdit { border: 1px solid #ccc; border-radius: 4px; padding: 5px; }"
+    )
+    sim_frame_layout.addWidget(self.label_gain)
+    sim_frame_layout.addWidget(self.textbox_gain)
     
-    # シミュレーション結果表示
-    # self.label_result = QLabel("シミュレーション結果:")
-    # self.textbox_result = QLineEdit()
-    # self.textbox_result.setReadOnly(True)
-    # self.textbox_result.setPlaceholderText("シミュレーション実行後に結果が表示されます")
-    # self.sim_layout.addWidget(self.label_result)
-    # self.sim_layout.addWidget(self.textbox_result)
-    
+    self.sim_layout.addWidget(sim_frame)
     self.sim_widget.hide()
     layout.addWidget(self.sim_widget)
+
+    layout.addStretch()
+
+    # ===== 実行ボタン =====
+    self.exec_button = QPushButton("実行")
+    self.exec_button.setMinimumHeight(45)
+    exec_font = QFont()
+    exec_font.setPointSize(12)
+    exec_font.setBold(True)
+    self.exec_button.setFont(exec_font)
+    self.exec_button.setStyleSheet(
+        "QPushButton {"
+        "  background-color: #4CAF50;"
+        "  color: white;"
+        "  border: none;"
+        "  border-radius: 5px;"
+        "  padding: 10px;"
+        "}"
+        "QPushButton:hover {"
+        "  background-color: #45a049;"
+        "}"
+        "QPushButton:pressed {"
+        "  background-color: #3d8b40;"
+        "}"
+    )
+    layout.addWidget(self.exec_button)
+
+    # ===== 結果表示 =====
+    self.result_label = QLabel("未実行")
+    result_font = QFont()
+    result_font.setPointSize(10)
+    self.result_label.setFont(result_font)
+    self.result_label.setWordWrap(True)
+    self.result_label.setStyleSheet(
+        "QLabel { background-color: #f5f5f5; padding: 10px; border-radius: 4px; }"
+    )
+    layout.addWidget(self.result_label)
 
     self.exec_button.clicked.connect(self.on_execute)
     self.radio_a.toggled.connect(self.on_mode_changed)
