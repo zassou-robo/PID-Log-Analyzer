@@ -13,6 +13,6 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 1.PID制御のログをcsv形式で読み込むことでそれらの応答時間、出力、定常偏差などの可視化。
 2.目標値、ゲインを指定することで最適なゲイン調整の補助。
 ## システム外観
-  ### PIDロググラフ
-    ![pid_log](./assets/pictures/pid_simulation.png)
+### PIDロググラフ
+![pid_log](./assets/pictures/pid_simulation.png)
 ## ダウンロード
