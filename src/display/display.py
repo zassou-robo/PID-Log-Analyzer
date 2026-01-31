@@ -21,6 +21,7 @@ class MainWindow(QWidget):
     super().__init__()
     self.setWindowTitle("PID_Log_Analyzer - モード選択")
     self.setGeometry(100, 100, 800, 700)
+    self.setMinimumSize(800, 700)  # 最小サイズのみ指定（最大化可能に）
     
     # スタイルシート（統一デザイン）
     self.setStyleSheet(
@@ -150,6 +151,7 @@ class MainWindow(QWidget):
     sim_frame_layout.addWidget(self.textbox_gain)
     
     self.sim_layout.addWidget(sim_frame)
+    self.sim_widget.setMaximumHeight(200)  # シミュレーションウィジェットの高さを制限
     self.sim_widget.hide()
     layout.addWidget(self.sim_widget)
 
