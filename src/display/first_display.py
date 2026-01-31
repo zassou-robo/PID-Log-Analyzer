@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QFrame,
 )
 from PySide6.QtCore import Slot, Qt
-from PySide6.QtGui import QFont, QColor, QPixmap
+from PySide6.QtGui import QFont, QColor, QPixmap, QImage
 from PySide6.QtWidgets import QScrollArea
 
 
@@ -43,10 +43,10 @@ class FirstDisplay(QWidget):
         # ロゴが読み込めたかチェック
         if not logo_pixmap.isNull():
             # 画像を読み込めた場合 - 正方形サイズ（150×150）で拡大縮小
-            logo_pixmap = logo_pixmap.scaledToWidth(150, Qt.SmoothTransformation)
+            logo_pixmap = logo_pixmap.scaledToWidth(150, Qt.TransformationMode.SmoothTransformation)
             # 正方形にするため、不足している高さを追加
             if logo_pixmap.height() < 150:
-                logo_pixmap = logo_pixmap.scaledToHeight(150, Qt.SmoothTransformation)
+                logo_pixmap = logo_pixmap.scaledToHeight(150, Qt.TransformationMode.SmoothTransformation)
             logo_label.setPixmap(logo_pixmap)
             logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             logo_label.setMinimumHeight(150)
