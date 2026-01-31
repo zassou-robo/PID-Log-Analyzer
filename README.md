@@ -19,13 +19,9 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 モード選択前のUIです
 
 
-
-
 ![select_](./assets/pictures/switch_ui_first.png)
 
 モード選択のシンプルなUIです
-
-
 
 
 ![sim_ui](./assets/pictures/simration_ui__.png)
@@ -33,13 +29,9 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 シミュレーションモードでの値入力画面です
 
 
-
-
 ![pid_log](./assets/pictures/pid_simulation.png)
 
 目標値、現在の出力、差が表示されています。
-
-
 
 
 ![csv_ui](./assets/pictures/csv_load_ui__.png)
@@ -121,3 +113,14 @@ python main.py
 | matplotlib が動作しない | `pip install --upgrade matplotlib` を実行 |
 
 
+# ライセンス
+
+このプロジェクトは LGPL v3 の下でライセンスされています。
+
+## 依存パッケージ
+- **PySide6**: LGPL v3 (Qt Company, The Qt Company Ltd.)
+- **numpy**: BSD License
+- **matplotlib**: PSF License
+- **pandas**: BSD License
+
+詳細は `docs/LICENSE` をご覧ください。
