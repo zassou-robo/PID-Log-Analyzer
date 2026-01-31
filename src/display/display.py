@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Slot, Qt
 from PySide6.QtGui import QFont
-from src.display.display_funcs import funcs
 from src.calc.pid_calc import pid_calc
 from src.plot.plot import plot_all
 from src.display.csv_load import load_csv_file

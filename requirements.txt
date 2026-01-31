@@ -1,5 +1,4 @@
-pygame
 numpy
 matplotlib
 pandas
-dearpygui
+PySide6
