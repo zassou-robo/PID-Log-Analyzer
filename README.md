@@ -19,9 +19,13 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 モード選択前のUIです
 
 
+
+
 ![select_](./assets/pictures/switch_ui_first.png)
 
 モード選択のシンプルなUIです
+
+
 
 
 ![sim_ui](./assets/pictures/simration_ui__.png)
@@ -29,14 +33,20 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 シミュレーションモードでの値入力画面です
 
 
+
+
 ![pid_log](./assets/pictures/pid_simulation.png)
 
 目標値、現在の出力、差が表示されています。
 
 
+
+
 ![csv_ui](./assets/pictures/csv_load_ui__.png)
 
 CSVをロードしてログを表示するモードの画面です
+
+
 
 
 ## 🔧環境構築
