@@ -37,7 +37,7 @@ class FirstDisplay(QWidget):
         
         logo_label = QLabel()
         # プロジェクトルートを基準にしたパスを構築
-        logo_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "pictures", "PID_Log_Analyzer_logo.png")
+        logo_path = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "pictures", "logo.png")
         logo_pixmap = QPixmap(logo_path)
         
         # ロゴが読み込めたかチェック
