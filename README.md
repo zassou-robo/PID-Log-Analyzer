@@ -14,7 +14,7 @@ PID制御を行う際に定常偏差が打ち消されないことによるハ�
 2.目標値、ゲインを指定することで最適なゲイン調整の補助。
 ## 📷システム外観のスクリーンショット
 
-![first_ui](./assets/pictures/switch_ui_first__.png)
+![first_ui](./assets/pictures/switch_ui_first___.png)
 
 モード選択前のUIです
 
